@@ -1,12 +1,15 @@
 {
-  "responseId": "7fc89e3b-bbbc-49c7-98b2-f12a9353c2c4",
+  "responseId": "bc60cef1-b61d-4c90-be47-0dab5bcb3c2c",
   "queryResult": {
-    "queryText": "how is patna right now?",
+    "queryText": "how is new Delhi next 7 days",
     "parameters": {
-      "time": "2019-04-03T22:33:12+05:30",
-      "date-period": "",
+      "location": "New Delhi",
       "date": "",
-      "location": "Patna"
+      "date-period": {
+        "startDate": "2019-04-04T12:00:00+05:30",
+        "endDate": "2019-04-11T12:00:00+05:30"
+      },
+      "time": ""
     },
     "allRequiredParamsPresent": true,
     "fulfillmentMessages": [
@@ -25,7 +28,8 @@
     "intentDetectionConfidence": 1,
     "languageCode": "en"
   },
-  "webhookStatus": {
-    "message": "Webhook execution successful"
-  }
+  "originalDetectIntentRequest": {
+    "payload": {}
+  },
+  "session": "projects/transcribe-me/agent/sessions/4cb1042c-b79c-3c92-70d5-1f1b3fcadd7a"
 }
