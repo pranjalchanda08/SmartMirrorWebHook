@@ -1,0 +1,31 @@
+{
+  "responseId": "7fc89e3b-bbbc-49c7-98b2-f12a9353c2c4",
+  "queryResult": {
+    "queryText": "how is patna right now?",
+    "parameters": {
+      "time": "2019-04-03T22:33:12+05:30",
+      "date-period": "",
+      "date": "",
+      "location": "Patna"
+    },
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/transcribe-me/agent/intents/841742c0-a766-482d-94fe-9bc9e254908e",
+      "displayName": "Weather"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en"
+  },
+  "webhookStatus": {
+    "message": "Webhook execution successful"
+  }
+}
