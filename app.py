@@ -1,5 +1,6 @@
 from flask import request, Flask, jsonify
 import requests
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -16,12 +17,14 @@ def getNested(data, *args):
 			value = data.get(element)
 			return value if len(args) == 1 else getNested(value, *args[1:])
 def getDays(startDate,endDate,dFormat = '%Y-%m-%d'):
-	if (type(startDate) and type(endDate) and tyepe(dFormat)) is not str:
+	if (type(startDate) and type(endDate) and type(dFormat)) is not str:
 		return 'Invalid arguments type. Only sypports string'
 	else:
 		startDate = startDate.split('T')[0]
-		endDate = startDate.split('T')[0]
-		a = datetime.strptime(starDate,dFormat)
+		endDate = endDate.split('T')[0]
+		print(startDate)
+		print(endDate)
+		a = datetime.strptime(startDate,dFormat)
 		b = datetime.strptime(endDate,dFormat)
 		diff = b-a
 		return diff.days
@@ -29,26 +32,28 @@ def getDays(startDate,endDate,dFormat = '%Y-%m-%d'):
 @app.route('/request/dailogueflow/' , methods=['POST'])
 def handle_POST():
 	if not request.json:
-		abort(400)
+		return jsonify({"request" : "Bad request"}), 400
 	response = ''
 	Intent = getNested(request.json, "queryResult", "intent","displayName")
-	if Intent is 'Weather':
+	if 'Weather' in Intent:
 		PARAMS = dict(key=Apixu_KEY)
-		location = getNested(request.json, "queryResult", "parameters", "location")
+		parameters = getNested(request.json, "queryResult", "parameters")
+		location = getNested(parameters, "location")
 		if not location:
 			location = 'auto:ip'
 		PARAMS['q']=location
-		date = getNested(request.json, "queryResult", "parameters", "date")
-		if date is '':
-			date_period = getNested(request.json, "queryResult", "parameters", "date-period")
-			if date_period is not '':
-				days=getDays(startDate=getNested(date_period, "startDate"),
-					endDate = getNested(date_period, "endDate"))
-			PARAMS['days'] = str(days)
-		else:
+		date = getNested(parameters, "date")
+		if date is not '':
 			PARAMS['days'] = date.split('T')[0]
-		data = requests.get(url= Apixu_Request, params=PARAMS).json()		
-	return jsonify({"response" : response}),200
+		else:
+			date_period = getNested(parameters, "date-period")
+			if date_period is not '':
+				days=getDays(startDate=date_period["startDate"],
+					endDate = date_period["endDate"])
+			PARAMS['days'] = str(days)
+		print(PARAMS)
+		data = requests.get(url= Apixu_Request, params=PARAMS).json()
+	return jsonify({"webRequest" : PARAMS}),200
 
 if __name__ == '__main__':
 	app.run(debug=True)
