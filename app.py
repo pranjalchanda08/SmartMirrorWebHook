@@ -4,13 +4,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/request/dailogueflow/' , methods=['POST'])
-def handle_POST():
-	if not request.json:
-		return jsonify({"request" : "Bad request"}), 400
-	response = Weather()	
-	return jsonify(response),200
-
 def getNested(data, *args):
 	if args and data:
 		element  = args[0]
@@ -33,7 +26,7 @@ def Weather():
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
 	Intent = getNested(request.json, "queryResult", "intent","displayName")
-	if 'weather' in Intent:
+	if 'Weather' in Intent:
 		PARAMS = dict(key=Apixu_KEY)
 		parameters = getNested(request.json, "queryResult", "parameters")
 		location = getNested(parameters, "location")
@@ -53,7 +46,14 @@ def Weather():
 		data = requests.get(url= Apixu_Request, params=PARAMS).json()
 		speech = "Its goning to be {}, with a feel of {}^C"
 		response = dict(speech= speech.format(data["current"]["condition"]["text"], data["current"]["feelslike_c"]))
+		print (response)
 		return response
 
+@app.route('/request/dailogueflow/' , methods=['POST'])
+def handle_POST():
+	if not request.json:
+		return jsonify({"request" : "Bad request"}), 400
+	response = Weather()
+	return jsonify(response),200
 if __name__ == '__main__':
 	app.run(debug=True)
