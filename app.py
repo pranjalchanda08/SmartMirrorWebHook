@@ -53,6 +53,7 @@ def handle_POST():
 			PARAMS['days'] = str(days)
 		print(PARAMS)
 		data = requests.get(url= Apixu_Request, params=PARAMS).json()
+		PARAMS['data'] = data
 	return jsonify({"webRequest" : PARAMS}),200
 
 if __name__ == '__main__':
