@@ -84,4 +84,5 @@ def Weather(request,unit='C'):
 				temp_max,unit,temp_min,unit)
 	fulfillment ["fulfillmentText"] = speech
 	fulfillment ["fulfillmentMessages"][0]["text"] = [speech]
+	fulfillment ["payload"]["google"]["richResponse"]["items"][0]["simpleResponse"]["textToSpeech"]=speech
 	return fulfillment
