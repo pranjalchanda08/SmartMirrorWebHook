@@ -62,13 +62,13 @@ def Weather(request,unit='C'):
 			getNested(data,"current",("feelslike_c" if unit=='C' else "feelslike_f")), unit)
 	else:
 		forcast_data = data["forecast"]["forecastday"]
-		speech=[]
+		speech=''
 		for x in range(len(forcast_data)):
 			date= datetime.strptime(forcast_data[x]['date'],'%Y-%m-%d').strftime("%A, %B %d")
 			temp_max= forcast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
 			temp_min= forcast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forcast_data[x]['day']['condition']['text']
-			speech[x] = 'On {} it is going to be {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
+			speech+= '{} is {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
 										temp_max,unit,temp_min,unit)
 	fulfillment ["fulfillmentText"] = speech
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
