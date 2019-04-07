@@ -41,7 +41,7 @@ def Weather(request,unit='C'):
 	geo_city = getNested(parameters, "geo-city")
 	geo_state = getNested(parameters, "geo-state")
 	location = geo_city if geo_state=='' else geo_state  
-	if not location:
+	if location is '':
 		location = 'auto:ip'
 	PARAMS['q']=location
 	date = getNested(parameters, "date")
