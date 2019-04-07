@@ -42,7 +42,8 @@ def Weather(request,unit='C'):
 	geo_state = getNested(parameters, "geo-state")
 	location = geo_city if geo_state=='' else geo_state  
 	if location is '':
-		location = 'auto:ip'
+		ipPARAM = {'format' : 'json'}
+		location = (requests.get(url='https://api.ipify.org', params=ipPARAM).json())['ip']
 	PARAMS['q']=location
 	date = getNested(parameters, "date")
 	date_period = getNested(parameters, "date-period")
