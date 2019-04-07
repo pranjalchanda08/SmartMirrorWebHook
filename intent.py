@@ -76,7 +76,7 @@ def Weather(request,unit='C'):
 		forcast_data = data["forecast"]["forecastday"]
 		speech=''
 		for x in range(len(forcast_data)):
-			date= datetime.strptime(forcast_data[x]['date'],'%Y-%m-%d').strftime("%A,%B %d")
+			date= datetime.strptime(forcast_data[x]['date'],'%Y-%m-%d').strftime("%A, %B %d")
 			temp_max= forcast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
 			temp_min= forcast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forcast_data[x]['day']['condition']['text']
