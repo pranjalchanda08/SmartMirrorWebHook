@@ -1,6 +1,30 @@
 import requests
 from datetime import datetime
 
+fulfillment = {
+	"fulfillmentText" : '',
+	"fulfillmentMessages": [
+		{
+			"text" : ['abcd']
+		}
+	],
+	"source" : "webhook",
+	"payload": {
+		"google" : {
+			"expectUserResponse": True,
+			"richResponse" : {
+				"items": [
+					{
+						"simpleResponse": {
+							"textToSpeech" : ''
+						}
+					}
+				]
+			}
+		}
+	}
+}
+
 def getNested(data, *args):
 	if args and data:
 		element  = args[0]
@@ -20,6 +44,7 @@ def getDays(startDate,endDate,dFormat = '%Y-%m-%d'):
 		return diff.days
 
 def Weather(request,unit='C'):
+	global fulfillment
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
 	forcast = False
@@ -51,11 +76,12 @@ def Weather(request,unit='C'):
 		forcast_data = data["forecast"]["forecastday"]
 		speech=''
 		for x in range(len(forcast_data)):
-			date= forcast_data[x]['date']
+			date= datetime.strptime(forcast_data[x]['date'],'%Y-%m-%d').strftime("%A,%B %d")
 			temp_max= forcast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
 			temp_min= forcast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forcast_data[x]['day']['condition']['text']
 			speech+= 'On {} it is going to be {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
 				temp_max,unit,temp_min,unit)
-	response = dict(speech= speech, displayText= speech, source= 'webhook')
-	return response
+	fulfillment ["fulfillmentText"] = speech
+	fulfillment ["fulfillmentMessages"][0]["text"] = [speech]
+	return fulfillment

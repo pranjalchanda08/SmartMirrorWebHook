@@ -12,6 +12,9 @@ def handle_POST():
 		response = intent.Weather(unit='C', request=request.json)
 	return jsonify(response),200
 
+@app.route('/request/dailogueflow/' , methods=['GET'])
+def handle_GET():
+	return jsonify({"request" : "Methode not supported"}), 405
 
 if __name__ == '__main__':
 	app.run(debug=True)
