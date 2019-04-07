@@ -45,17 +45,17 @@ def Weather(request,unit='C'):
 		location = 'auto:ip'
 	PARAMS['q']=location
 	date = getNested(parameters, "date")
+	date_period = getNested(parameters, "date-period")
 	if date is not '':
 		PARAMS['dt'] = date.split('T')[0]
 		now = datetime.now().isoformat()
 		days=getDays(now,PARAMS['dt'])
 		if days is not 0:
 			forcast = True
-	elif (date_period = getNested(parameters, "date-period")) is not '':		
-		if date_period is not '':
-			days=getDays(startDate=date_period["startDate"],
-				endDate = date_period["endDate"])
-			forcast = True
+	elif date_period is not '':	
+		days=getDays(startDate=date_period["startDate"],
+			endDate = date_period["endDate"])
+		forcast = True
 		PARAMS['days'] = str(days)
 	else:
 		now = datetime.now().isoformat()
