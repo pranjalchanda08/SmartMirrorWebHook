@@ -5,24 +5,26 @@ fulfillment = {
 	"fulfillmentText" : '',
 	"fulfillmentMessages": [
 		{
-			"text" : ['abcd']
+			"text" : {
+				"text" : ['abcd']
+			}
 		}
 	],
 	"source" : "webhook",
-	"payload": {
-		"google" : {
-			"expectUserResponse": True,
-			"richResponse" : {
-				"items": [
-					{
-						"simpleResponse": {
-							"textToSpeech" : ''
-						}
-					}
-				]
-			}
-		}
-	}
+	# "payload": {
+	# 	"google" : {
+	# 		"expectUserResponse": True,
+	# 		"richResponse" : {
+	# 			"items": [
+	# 				{
+	# 					"simpleResponse": {
+	# 						"textToSpeech" : ''
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	}
+	# }
 }
 
 def getNested(data, *args):
@@ -83,6 +85,6 @@ def Weather(request,unit='C'):
 			speech+= 'On {} it is going to be {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
 				temp_max,unit,temp_min,unit)
 	fulfillment ["fulfillmentText"] = speech
-	fulfillment ["fulfillmentMessages"][0]["text"] = [speech]
-	fulfillment ["payload"]["google"]["richResponse"]["items"][0]["simpleResponse"]["textToSpeech"]=speech
+	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
+	# fulfillment ["payload"]["google"]["richResponse"]["items"][0]["simpleResponse"]["textToSpeech"]=speech
 	return fulfillment
