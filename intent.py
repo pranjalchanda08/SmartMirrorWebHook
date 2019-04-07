@@ -38,7 +38,7 @@ def Weather(request,unit='C'):
 	forcast = False
 	PARAMS = dict(key=Apixu_KEY)
 	parameters = getNested(request, "queryResult", "parameters")
-	location = getNested(parameters, "location")
+	location = getNested(parameters, "geo-city")
 	if not location:
 		location = 'auto:ip'
 	PARAMS['q']=location
