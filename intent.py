@@ -51,13 +51,15 @@ def Weather(request,unit='C'):
 		days=getDays(now,PARAMS['dt'])
 		if days is not 0:
 			forcast = True
-	else:
-		date_period = getNested(parameters, "date-period")
+	elif (date_period = getNested(parameters, "date-period")) is not '':		
 		if date_period is not '':
 			days=getDays(startDate=date_period["startDate"],
 				endDate = date_period["endDate"])
 			forcast = True
 		PARAMS['days'] = str(days)
+	else:
+		now = datetime.now().isoformat()
+		PARAMS['dt'] = now.split('T')[0]
 	data = requests.get(url= Apixu_Request, params= PARAMS).json()
 	if not forcast:
 		speech = "Its goning to be {}, with a feel of {}°{}".format(getNested(data,"current","condition","text"),
