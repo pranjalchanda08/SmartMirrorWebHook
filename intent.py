@@ -35,7 +35,7 @@ def Weather(request,unit='C'):
 	global fulfillment
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
-	forcast = False
+	forecast = False
 	PARAMS = dict(key=Apixu_KEY)
 	parameters = getNested(request, "queryResult", "parameters")
 	geo_city = getNested(parameters, "geo-city")
@@ -52,29 +52,29 @@ def Weather(request,unit='C'):
 		now = datetime.now().isoformat()
 		days=getDays(now,PARAMS['dt'])
 		if days is not 0:
-			forcast = True
+			forecast = True
 	elif date_period is not '':	
 		days=getDays(startDate=date_period["startDate"],
 			endDate = date_period["endDate"])
-		forcast = True
+		forecast = True
 		PARAMS['days'] = str(days)
 	else:
 		now = datetime.now().isoformat()
 		PARAMS['dt'] = now.split('T')[0]
 	data = requests.get(url= Apixu_Request, params= PARAMS).json()
-	if not forcast:
+	if not forecast:
 		speech = "{}, with a feel of {}°{}".format(getNested(data,"current","condition","text"),
 			getNested(data,"current",("feelslike_c" if unit=='C' else "feelslike_f")), unit)
 	else:
-		forcast_data = data["forecast"]["forecastday"]
-		speech=''
-		for x in range(len(forcast_data)):
-			date= datetime.strptime(forcast_data[x]['date'],'%Y-%m-%d').strftime("%A, %B %d")
-			temp_max= forcast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
-			temp_min= forcast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
-			condition= forcast_data[x]['day']['condition']['text']
-			speech+= '{} is {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
-										temp_max,unit,temp_min,unit)
+		forecast_data = data["forecast"]["forecastday"]
+		speech=[]
+		for x in range(len(forecast_data)):
+			date= datetime.strptime(forecast_data[x]['date'],'%Y-%m-%d').strftime("%A, %B %d")
+			temp_max = forecast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
+			temp_min = forecast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
+			condition= forecast_data[x]['day']['condition']['text']
+			speech.append(['{} is {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
+																temp_max,unit,temp_min,unit)])
 	fulfillment ["fulfillmentText"] = speech
-	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
+	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = speech
 	return fulfillment
