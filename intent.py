@@ -39,11 +39,11 @@ def Weather(request,unit='C'):
 	else:
 		location = geo_city
 	if location is '':
-		ipPARAM = {'format' : 'json'}
-		location = (requests.get(url='https://api.ipify.org', params=ipPARAM).json())['ip']
+		location = 'auto:ip'
 	PARAMS['q']=location
 	date = getNested(parameters, "date")
 	date_period = getNested(parameters, "date-period")
+	duration =  getNested(parameters, "duration")
 	if date is not '':
 		PARAMS['dt'] = date.split('T')[0]
 		now = datetime.now().isoformat()
@@ -55,6 +55,8 @@ def Weather(request,unit='C'):
 			endDate = date_period["endDate"])
 		forecast = True
 		PARAMS['days'] = str(days)
+	elif duration is not '':
+		PARAMS['days'] = str(getNested(duration, "amount"))
 	else:
 		now = datetime.now().isoformat()
 		PARAMS['dt'] = now.split('T')[0]
