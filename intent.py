@@ -1,18 +1,6 @@
 import requests
 from datetime import datetime
 
-fulfillment = {
-	"fulfillmentText" : '',
-	"fulfillmentMessages": [
-		{
-			"text" : {
-				"text" : ['abcd']
-			}
-		}
-	],
-	"source" : "webhook",
-}
-
 def getNested(data, *args):
 	if args and data:
 		element  = args[0]
@@ -75,6 +63,4 @@ def Weather(request,unit='C'):
 			condition= forecast_data[x]['day']['condition']['text']
 			speech+='{} is {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
 																temp_max,unit,temp_min,unit)
-	fulfillment ["fulfillmentText"] = speech
-	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
-	return fulfillment
+	return speech
