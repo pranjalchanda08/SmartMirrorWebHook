@@ -51,16 +51,18 @@ def Weather(request,unit='C'):
 		PARAMS['dt'] = now.split('T')[0]
 	data = requests.get(url= Apixu_Request, params= PARAMS).json()
 	if not forecast:
-		speech = "{}, with a feel of {}°{}".format(getNested(data,"current","condition","text"),
+		speech = "{} is {}, with a feel of {}°{}"
+		.format(getNested(data,"location","name"),
+			getNested(data,"current","condition","text"),
 			getNested(data,"current",("feelslike_c" if unit=='C' else "feelslike_f")), unit)
 	else:
 		forecast_data = data["forecast"]["forecastday"]
-		speech=''
+		speech = 'For {}, '.format(getNested(data,"location","name"))
 		for x in range(len(forecast_data)):
 			date= datetime.strptime(forecast_data[x]['date'],'%Y-%m-%d').strftime("%A, %B %d")
 			temp_max = forecast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
 			temp_min = forecast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forecast_data[x]['day']['condition']['text']
-			speech+='{} is {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
+			speech+='{} will be {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
 																temp_max,unit,temp_min,unit)
 	return speech
