@@ -51,8 +51,7 @@ def Weather(request,unit='C'):
 		PARAMS['dt'] = now.split('T')[0]
 	data = requests.get(url= Apixu_Request, params= PARAMS).json()
 	if not forecast:
-		speech = "{} is {}, with a feel of {}°{}"
-		.format(getNested(data,"location","name"),
+		speech = "{} is {}, with a feel of {}°{}".format(getNested(data,"location","name"),
 			getNested(data,"current","condition","text"),
 			getNested(data,"current",("feelslike_c" if unit=='C' else "feelslike_f")), unit)
 	else:
