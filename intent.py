@@ -73,8 +73,8 @@ def Weather(request,unit='C'):
 			temp_max = forecast_data[x]['day'][("maxtemp_c" if unit=='C' else "maxtemp_f")]
 			temp_min = forecast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forecast_data[x]['day']['condition']['text']
-			speech.append(['{} is {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
-																temp_max,unit,temp_min,unit)])
+			speech.append('{} is {}, with a maximum of {}°{} and a min of {}°{}. '.format(date,condition,
+																temp_max,unit,temp_min,unit))
 	fulfillment ["fulfillmentText"] = speech
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = speech
 	return fulfillment
