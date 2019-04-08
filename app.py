@@ -2,7 +2,17 @@ from flask import request, Flask, jsonify
 import intent
 
 app = Flask(__name__)
-
+fulfillment = {
+	"fulfillmentText" : '',
+	"fulfillmentMessages": [
+		{
+			"text" : {
+				"text" : ['abcd']
+			}
+		}
+	],
+	"source" : "webhook",
+}
 @app.route('/request/dailogueflow/' , methods=['POST'])
 def handle_POST():
 	if not request.json:
@@ -10,7 +20,10 @@ def handle_POST():
 	Intent = intent.getNested(request.json, "queryResult", "intent","displayName")
 	if 'Weather' or 'weather' is Intent:
 		response = intent.Weather(unit='C', request=request.json)
-	return jsonify(response),200
+	
+	fulfillment ["fulfillmentText"] = response
+	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
+	return jsonify(fulfillment),200
 
 @app.route('/',methods=['GET'])
 def handle_GET():
