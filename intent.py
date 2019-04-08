@@ -26,9 +26,18 @@ def Weather(request,unit='C'):
 	forecast = False
 	PARAMS = dict(key=Apixu_KEY)
 	parameters = getNested(request, "queryResult", "parameters")
-	geo_city = getNested(parameters, "city")
-	geo_state = getNested(parameters, "state")
-	location = geo_city if geo_state =='' else geo_state  
+	city = getNested(parameters, "city")
+	state = getNested(parameters, "state")
+	geo_city = getNested(parameters, "geo-city")
+	geo_state = getNested(parameters, "geo-state")
+	if city is not '':
+		location = city
+	elif state is not '':
+		location = state
+	elif geo_state is not '':
+		location = geo_state
+	else:
+		location = geo_city
 	if location is '':
 		ipPARAM = {'format' : 'json'}
 		location = (requests.get(url='https://api.ipify.org', params=ipPARAM).json())['ip']
