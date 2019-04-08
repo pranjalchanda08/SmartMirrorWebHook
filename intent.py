@@ -76,5 +76,5 @@ def Weather(request,unit='C'):
 			speech+='{} is {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
 																temp_max,unit,temp_min,unit)
 	fulfillment ["fulfillmentText"] = speech
-	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = speech
+	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
 	return fulfillment
