@@ -12,7 +12,7 @@ def handle_POST():
 		response = intent.Weather(unit='C', request=request.json)
 	return jsonify(response),200
 
-@app.route('/request/dailogueflow/' , methods=['GET'])
+@app.route('/',methods=['GET'])
 def handle_GET():
 	return jsonify({"request" : "Methode not supported"}), 405
 
