@@ -28,27 +28,17 @@ def Weather(request,unit='C'):
 	parameters = getNested(request, "queryResult", "parameters")
 	location = getNested(parameters, "location")
 	results = ''
-	for loc in location: results += loc+' '
-	if 'city' in results:
-		city= location['city']
-	elif 'subadmin-area' in results:
-		city= location['subadmin-area']
-	elif 'admin-area' in results:
-		city= location['admin-area']
-	elif 'country' in results:
-		city= location['country']
-	elif 'island' in results:
-		city= location['island']
-	elif 'business-name' in results:
-		city= location['business-name']
-	elif 'shortcut' in results:
-		city= location['shortcut']
-	elif 'street-address' in results:
-		city= location['street-address']
-	elif 'zip-code' in results:
-		city= location['zip-code']	
-	else:
-		city = 'auto:ip' 
+	for  loc in location 			: results += loc+' '
+	if   'city' in results			: city= location['city']		
+	elif 'subadmin-area' in results	: city= location['subadmin-area']		
+	elif 'admin-area'    in results	: city= location['admin-area']		
+	elif 'country'       in results	: city= location['country']		
+	elif 'island'        in results	: city= location['island']		
+	elif 'business-name' in results	: city= location['business-name']		
+	elif 'shortcut'      in results	: city= location['shortcut']		
+	elif 'street-address'in results : city= location['street-address']		
+	elif 'zip-code'      in results	: city= location['zip-code']			
+	else							: city= 'auto:ip' 		
 	PARAMS['q']=city
 	date = getNested(parameters, "date")
 	date_period = getNested(parameters, "date-period")
@@ -57,15 +47,13 @@ def Weather(request,unit='C'):
 		PARAMS['dt'] = date.split('T')[0]
 		now = datetime.now().isoformat()
 		days=getDays(now,PARAMS['dt'])
-		if days is not 0:
-			forecast = True
+		if days is not 0: forecast = True
 	elif date_period is not '':	
 		days=getDays(startDate=date_period["startDate"],
 			endDate = date_period["endDate"])
 		forecast = True
 		PARAMS['days'] = str(days)
-	elif duration is not '':
-		PARAMS['days'] = str(getNested(duration, "amount"))
+	elif duration is not '': PARAMS['days'] = str(getNested(duration, "amount"))
 	else:
 		now = datetime.now().isoformat()
 		PARAMS['dt'] = now.split('T')[0]
@@ -83,5 +71,5 @@ def Weather(request,unit='C'):
 			temp_min = forecast_data[x]['day'][("mintemp_c" if unit=='C' else "mintemp_f")]
 			condition= forecast_data[x]['day']['condition']['text']
 			speech+='{} will be {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
-																temp_max,unit,temp_min,unit)
+					temp_max,unit,temp_min,unit)
 	return speech
