@@ -17,7 +17,7 @@ fulfillment = {
 def handle_POST():
 	if not request.json:
 		return jsonify({"request" : "Bad request"}), 400
-	Intent = intent.getNested(request.json, "queryResult", "intent","displayName")
+	Intent = intent.getNested(request.json, "queryResult", "intent", "displayName")
 	if 'Weather' or 'weather' is Intent:
 		response = intent.Weather(unit='C', request=request.json)
 	
@@ -27,7 +27,7 @@ def handle_POST():
 
 @app.route('/',methods=['GET'])
 def handle_GET():
-	return jsonify({"request" : "Methode not supported"}), 405
+	return "Methode not supported", 405
 
 if __name__ == '__main__':
 	app.run(debug=True)

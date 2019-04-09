@@ -31,6 +31,8 @@ def Weather(request,unit='C'):
 	for loc in location: results += loc+' '
 	if 'city' in results:
 		city= location['city']
+	elif 'subadmin-area' in results:
+		city= location['subadmin-area']
 	elif 'admin-area' in results:
 		city= location['admin-area']
 	elif 'country' in results:
