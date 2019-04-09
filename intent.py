@@ -26,21 +26,18 @@ def Weather(request,unit='C'):
 	forecast = False
 	PARAMS = dict(key=Apixu_KEY)
 	parameters = getNested(request, "queryResult", "parameters")
-	city = getNested(parameters, "city")
-	state = getNested(parameters, "state")
-	geo_city = getNested(parameters, "geo-city")
-	geo_state = getNested(parameters, "geo-state")
-	if city is not '':
-		location = city
-	elif state is not '':
-		location = state
-	elif geo_state is not '':
-		location = geo_state
+	location = getNested(parameters, "location")
+	results = ''
+	for loc in location: results += loc+' '
+	if 'city' in results:
+		city= location['city']
+	elif 'admin-area' in results:
+		city= location['admin-area']
+	elif 'country' in results:
+		city= location['country']
 	else:
-		location = geo_city
-	if location is '':
-		location = 'auto:ip'
-	PARAMS['q']=location
+		city = 'auto:ip'
+	PARAMS['q']=city
 	date = getNested(parameters, "date")
 	date_period = getNested(parameters, "date-period")
 	duration =  getNested(parameters, "duration")
