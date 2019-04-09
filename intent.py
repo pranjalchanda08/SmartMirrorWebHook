@@ -37,8 +37,18 @@ def Weather(request,unit='C'):
 		city= location['admin-area']
 	elif 'country' in results:
 		city= location['country']
+	elif 'island' in results:
+		city= location['island']
+	elif 'business-name' in results:
+		city= location['business-name']
+	elif 'shortcut' in results:
+		city= location['shortcut']
+	elif 'street-address' in results:
+		city= location['street-address']
+	elif 'zip-code' in results:
+		city= location['zip-code']	
 	else:
-		city = 'auto:ip'
+		city = 'auto:ip' 
 	PARAMS['q']=city
 	date = getNested(parameters, "date")
 	date_period = getNested(parameters, "date-period")
