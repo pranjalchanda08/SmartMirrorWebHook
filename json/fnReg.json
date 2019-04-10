@@ -1,0 +1,13 @@
+{
+  "pdi": {
+    "import": "Pranjal_dev.intent",
+    "intents": {
+      "weather": {
+        "func": "Weather",
+        "module": "Pranjal_dev.intent",
+        "include": true,
+        "global": "getWeather"
+      }
+    }
+  }
+}
