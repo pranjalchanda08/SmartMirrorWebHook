@@ -32,9 +32,9 @@ def handle_POST():
 			response = globals()[intent_reg[Intent]['alias']](request=request.json)	
 		fulfillment ["fulfillmentText"] = response
 		fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
-		res = Response(json.dumps(fulfillment,ensure_ascii=False))
-		res.headers['Content-Type'] = 'application/json; charset=utf8'
-		return res,200
+		# res = Response(json.dumps(fulfillment,ensure_ascii=False))
+		# res.headers['Content-Type'] = 'application/json; charset=utf8'
+		return jsonify(fulfillment),200
 	except Exception as e:
 		raise e
 		
