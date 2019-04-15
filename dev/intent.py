@@ -73,6 +73,6 @@ def Weather(request,unit='C'):
 			speech+='{} will be {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
 					temp_max,unit,temp_min,unit)
 	return speech
-	 
+
 if __name__ == '__main__':
 	cm.exportJson(modules)

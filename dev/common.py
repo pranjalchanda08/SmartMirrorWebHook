@@ -1,7 +1,6 @@
 import sys
 import json
 from datetime import datetime
-
 def getObject(module, objectName):
 	return getattr(sys.modules[module],objectName)
 
@@ -27,7 +26,7 @@ def exportJson(dictionary=None):
 	x={}
 	keys = ''
 	path = '../json/fnReg.json'
-	with open(path,'r',encoding='utf-8') as jFile:
+	with open(path,'r') as jFile:
 		x = json.load(jFile)
 		for key in x: 
 			keys += key + ''	
@@ -35,6 +34,6 @@ def exportJson(dictionary=None):
 			if key in keys:
 				return 'Key already exist. Try changing the key name'
 		x = {**x,**dictionary}
-	with open(path,'w',encoding='utf-8') as jFile:
+	with open(path,'w') as jFile:
 		json.dump(x,jFile,indent=2)
 	return 'Successfully Updated Json'
