@@ -21,6 +21,21 @@ fulfillment = {
 	],
 	"source" : "webhook",
 }
+def RegisterJson(jsonFile = 'json/fnReg.json'):
+	global intent_reg
+	global intent_string 
+	with open(jsonFile,'r') as file:
+		_loads=json.load(file)
+		print(_loads)
+		for key in _loads:
+			globals()[key]=importlib.import_module(_loads[key]["import"])
+			intent = _loads[key]['intents']
+			intent_reg = {**intent_reg,**intent}
+			for intentName in intent:
+				intent_string += intentName.lower() + ''
+				intentVal = intent.get(intentName)
+				globals()[intentVal['alias']]=common.getObject(intentVal['module'],intentVal['func'])
+
 RegisterJson()
 
 @app.route('/request/dailogueflow/' , methods=['POST'])
@@ -40,21 +55,5 @@ def handle_POST():
 def handle_GET():
 	return "Methode not supported", 405
 
-def RegisterJson(jsonFile = 'json/fnReg.json'):
-	global intent_reg
-	global intent_string 
-	with open(jsonFile,'r') as file:
-		_loads=json.load(file)
-		print(_loads)
-		for key in _loads:
-			globals()[key]=importlib.import_module(_loads[key]["import"])
-			intent = _loads[key]['intents']
-			intent_reg = {**intent_reg,**intent}
-			for intentName in intent:
-				intent_string += intentName.lower() + ''
-				intentVal = intent.get(intentName)
-				globals()[intentVal['alias']]=common.getObject(intentVal['module'],intentVal['func'])
-
- 
 if __name__ == '__main__':
 	app.run(debug=True,port=5000)
