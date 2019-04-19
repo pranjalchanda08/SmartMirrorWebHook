@@ -28,6 +28,7 @@ fulfillment = {
 
 @app.route('/request/dailogueflow/' , methods=['POST'])
 def handle_POST():
+	RegisterJson()
 	global intent_reg, intent_string
 	if not request.json:
 		return jsonify({"request" : "Bad request"}), 400
@@ -61,4 +62,4 @@ def RegisterJson(jsonFile = 'json/fnReg.json'):
  
 if __name__ == '__main__':
 	RegisterJson()
-	# app.run(debug=True,port=5000)
+	app.run(debug=True,port=5000)
