@@ -48,6 +48,7 @@ def RegisterJson(jsonFile = 'json/fnReg.json'):
 	global intent_string 
 	with open(jsonFile,'r') as file:
 		_loads=json.load(file)
+		print(_loads)
 		for key in _loads:
 			globals()[key]=importlib.import_module(_loads[key]["import"])
 			intent = _loads[key]['intents']
