@@ -59,5 +59,11 @@ def handle_POST():
 def handle_GET():
 	return "Methode not supported", 405
 
+@app.route('/home/<path:getPath>' , methods=['GET'])
+def handlePath(getPath):
+	with open(getPath, 'r') as file:
+		ret = file.read()
+	return ret,200
+
 if __name__ == '__main__':
 	app.run(debug=True,port=5000)

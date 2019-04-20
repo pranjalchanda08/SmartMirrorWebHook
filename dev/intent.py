@@ -6,6 +6,7 @@ import json
 import time
 import paho.mqtt.client as mqtt
 
+MQTTConnectFlag=False
 pdi = "dev.intent"
 modules = {
 	"pdi":{
@@ -26,11 +27,20 @@ modules = {
 		}
 	}
 }
-
+def onConnect(client,userdata,flags,rc):
+	global MQTTConnectFlag
+	if rc==0:
+		MQTTConnectFlag=True			
+	else:
+		MQTTConnectFlag=False
+	
 broker = "18.218.53.189"
 client = mqtt.Client("DeviceStatus")
 client.username_pw_set(username= 'dave', password= 'Pranjal')
-	
+client.connect(broker)
+client.loop_start()
+client.on_connect = onConnect
+		
 def Weather(request,unit='C'):
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
@@ -85,10 +95,44 @@ def Weather(request,unit='C'):
 					temp_max,unit,temp_min,unit)
 	return speech
 
-def DeviceStatus(request,client=client):
-	def onPublish(client, userdata, mid):
-		print("publish done")
+# def DeviceStatus(request):
+# 	global MQTTConnectFlag
+# 	global client
+# 	def onPublish(client, userdata, mid):
+# 		print("publish done")
 
+# 	def getPublish(parameters):
+# 		print(parameters)
+# 		ret = []
+# 		if 'light' in parameters['device']:
+# 			if parameters['number'] is not '':
+# 				topic = 'device/light/dim'
+# 				speed = parameters['number']
+# 				ret.append(dict(topic=topic, payload = speed))
+# 			if parameters['status']  is not '':
+# 				topic ='device/light/status'
+# 				status = parameters['status']
+# 				ret.append(dict(topic=topic, payload=status))
+# 		if 'fan' in parameters['device']:
+# 			topic = 'device/fan'
+# 			if parameters['number'] is not '':
+# 				topic = 'device/fan/speed'
+# 				speed = parameters['number']
+# 				ret.append(dict(topic=topic, payload = speed))
+# 			if parameters['status']  is not '':
+# 				topic ='device/fan/status'
+# 				status = parameters['status']
+# 				ret.append(dict(topic=topic, payload=status))
+# 		print('ret= {}'.format(ret))
+# 		return ret
+# 	client.on_publish = onPublish
+# 	parameters = cm.getNested(request, "queryResult", "parameters")
+# 	if MQTTConnectFlag is True:
+# 		ret = getPublish(parameters)
+# 		for element in ret:
+# 			print("i am here")
+# 			client.publish(topic=element['topic'], payload=element['payload'],qos=2)
+def DeviceStatus(request):
 	def getPublish(parameters):
 		print(parameters)
 		ret = []
@@ -113,19 +157,12 @@ def DeviceStatus(request,client=client):
 				ret.append(dict(topic=topic, payload=status))
 		print('ret= {}'.format(ret))
 		return ret
-	def onConnect(client,userdata,flags,rc):
-		if rc==0:
-			parameters = cm.getNested(request, "queryResult", "parameters")
-			ret = getPublish(parameters)
-			for element in ret:
-				client.publish(topic=element['topic'], payload=element['payload'])			
-		else:
-			print("Connection Failed, "+ mqtt.connack_string(rc))
-
-	client.connect(broker)
-	client.loop_start()
-	client.on_connect = onConnect
-	client.on_publish = onPublish
+	parameters = cm.getNested(request, "queryResult", "parameters")
+	publish = getPublish(parameters)
+	for element in publish:
+		with open(element['topic'],'w') as file:
+			file.write(element['payload'])
 	
+		
 if __name__ == '__main__':
 	cm.exportJson(modules)
