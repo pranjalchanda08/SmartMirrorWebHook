@@ -88,22 +88,37 @@ def Weather(request,unit='C'):
 def DeviceStatus(request):
 	def onPublish(client, userdata, mid):
 		print("publish done")
-		# time.sleep(1)
-		# client.loop_stop()
-		# client.disconnect()
 
 	def getPublish(parameters):
-		topic = 'device/'
-		topic+= parameters['device']
-		status= parameters['status']
-		print(topic)
-		print(status)
-		return topic,status
+		print(parameters)
+		ret = []
+		if 'light' in parameters['device']:
+			if parameters['number'] is not '':
+				topic = 'device/light/dim'
+				speed = parameters['number']
+				ret.append(dict(topic=topic, payload = speed))
+			if parameters['status']  is not '':
+				topic ='device/light/status'
+				status = parameters['status']
+				ret.append(dict(topic=topic, payload=status))
+		if 'fan' in parameters['device']:
+			topic = 'device/fan'
+			if parameters['number'] is not '':
+				topic = 'device/fan/speed'
+				speed = parameters['number']
+				ret.append(dict(topic=topic, payload = speed))
+			if parameters['status']  is not '':
+				topic ='device/fan/status'
+				status = parameters['status']
+				ret.append(dict(topic=topic, payload=status))
+		print('ret= {}'.format(ret))
+		return ret
 	def onConnect(client,userdata,flags,rc):
 		if rc==0:
 			parameters = cm.getNested(request, "queryResult", "parameters")
-			topic,status = getPublish(parameters)
-			client.publish(topic=topic, payload=status)			
+			ret = getPublish(parameters)
+			for element in ret:
+				client.publish(topic=element['topic'], payload=element['payload'])			
 		else:
 			print("Connection Failed, "+ mqtt.connack_string(rc))
 
