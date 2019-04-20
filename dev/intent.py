@@ -85,7 +85,7 @@ def Weather(request,unit='C'):
 					temp_max,unit,temp_min,unit)
 	return speech
 
-def DeviceStatus(request):
+def DeviceStatus(request,client=client):
 	def onPublish(client, userdata, mid):
 		print("publish done")
 
@@ -122,7 +122,6 @@ def DeviceStatus(request):
 		else:
 			print("Connection Failed, "+ mqtt.connack_string(rc))
 
-	global client
 	client.connect(broker)
 	client.loop_start()
 	client.on_connect = onConnect
