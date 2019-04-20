@@ -162,7 +162,7 @@ def DeviceStatus(request):
 	for element in publish:
 		with open(element['topic'],'w') as file:
 			file.write(element['payload'])
-	
+	return "OK"
 		
 if __name__ == '__main__':
 	cm.exportJson(modules)
