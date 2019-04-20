@@ -9,4 +9,3 @@ marshmallow-sqlalchemy==0.13.2
 psycopg2==2.7.5
 gunicorn==19.3.0
 requests
-paho-mqtt
