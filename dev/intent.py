@@ -3,6 +3,8 @@ import requests
 from datetime import datetime
 import os
 import json
+import time
+import paho.mqtt.client as mqtt
 
 pdi = "dev.intent"
 modules = {
@@ -14,13 +16,22 @@ modules = {
   				"module" : pdi,
   				"include": True,
   				"alias"  : "getWeather"
+  			},
+  			"device_status":{
+  				"func" : "DeviceStatus",
+  				"module" : pdi,
+  				"include": True,
+  				"alias"  : "getDeviceStatus"
   			}
 		}
 	}
 }
 
+broker = "18.218.53.189"
+client = mqtt.Client("DeviceStatus")
+client.username_pw_set(username= 'dave', password= 'Pranjal')
+	
 def Weather(request,unit='C'):
-	global fulfillment
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
 	forecast = False
@@ -74,5 +85,33 @@ def Weather(request,unit='C'):
 					temp_max,unit,temp_min,unit)
 	return speech
 
+def DeviceStatus(request):
+	def onPublish(client, userdata, mid):
+		print("publish done")
+		# time.sleep(1)
+		# client.loop_stop()
+		# client.disconnect()
+
+	def getPublish(parameters):
+		topic = 'device/'
+		topic+= parameters['device']
+		status= parameters['status']
+		print(topic)
+		print(status)
+		return topic,status
+	def onConnect(client,userdata,flags,rc):
+		if rc==0:
+			parameters = cm.getNested(request, "queryResult", "parameters")
+			topic,status = getPublish(parameters)
+			client.publish(topic=topic, payload=status)			
+		else:
+			print("Connection Failed, "+ mqtt.connack_string(rc))
+
+	global client
+	client.connect(broker)
+	client.loop_start()
+	client.on_connect = onConnect
+	client.on_publish = onPublish
+	
 if __name__ == '__main__':
 	cm.exportJson(modules)

@@ -26,15 +26,16 @@ def RegisterJson(jsonFile = 'json/fnReg.json'):
 	global intent_string 
 	with open(jsonFile,'r') as file:
 		_loads=json.load(file)
-		print(_loads)
 		for key in _loads:
 			globals()[key]=importlib.import_module(_loads[key]["import"])
 			intent = _loads[key]['intents']
 			intent_reg = {**intent_reg,**intent}
 			for intentName in intent:
-				intent_string += intentName.lower() + ''
 				intentVal = intent.get(intentName)
-				globals()[intentVal['alias']]=common.getObject(intentVal['module'],intentVal['func'])
+				if intentVal['include'] is True:
+					intent_string += intentName.lower() + ' '
+					globals()[intentVal['alias']]=common.getObject(intentVal['module'],intentVal['func'])
+			print(intent_string)
 
 RegisterJson()
 
@@ -46,7 +47,10 @@ def handle_POST():
 	Intent = common.getNested(request.json, "queryResult", "intent", "displayName")
 	Intent = Intent.lower()
 	if Intent in intent_string:
-		response = globals()[intent_reg[Intent]["alias"]](request=request.json)	
+		response = globals()[intent_reg[Intent]["alias"]](request=request.json)
+	else:
+		response = 'Error:101'
+		print("Intent not registered! Please make include to true to add this intent to intent list.")
 	fulfillment ["fulfillmentText"] = response
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
 	return jsonify(fulfillment),200
