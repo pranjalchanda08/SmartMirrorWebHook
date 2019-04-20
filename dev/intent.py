@@ -94,6 +94,8 @@ def DeviceStatus(request):
 			if parameters['number'] is not '':
 				topic = 'device/light/dim'
 				speed = parameters['number']
+				speed = int(speed)
+				speed = str(speed)
 				ret.append(dict(topic=topic, payload = speed))
 			if parameters['status']  is not '':
 				topic ='device/light/status'
@@ -104,6 +106,8 @@ def DeviceStatus(request):
 			if parameters['number'] is not '':
 				topic = 'device/fan/speed'
 				speed = parameters['number']
+				speed = int(speed)
+				speed = str(speed)
 				ret.append(dict(topic=topic, payload = speed))
 			if parameters['status']  is not '':
 				topic ='device/fan/status'
