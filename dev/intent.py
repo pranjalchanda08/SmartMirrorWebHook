@@ -89,37 +89,29 @@ def Weather(request,unit='C'):
 def DeviceStatus(request):
 	def getPublish(parameters):
 		print(parameters)
-		ret = []
+		ret = {}
 		if 'light' in parameters['device']:
+			light={}
 			if parameters['number'] is not '':
-				topic = 'device/light/dim'
-				speed = parameters['number']
-				speed = int(speed)
-				speed = str(speed)
-				ret.append(dict(topic=topic, payload = speed))
-			if parameters['status']  is not '':
-				topic ='device/light/status'
-				status = parameters['status']
-				ret.append(dict(topic=topic, payload=status))
+				light['dim'] = int(parameters['number'])
+			if parameters['status'] is not '':
+				light['status'] = True if 'on' in parameters['status'] else False
+			ret ['light'] = light
 		if 'fan' in parameters['device']:
-			topic = 'device/fan'
+			fan={}
 			if parameters['number'] is not '':
-				topic = 'device/fan/speed'
-				speed = parameters['number']
-				speed = int(speed)
-				speed = str(speed)
-				ret.append(dict(topic=topic, payload = speed))
-			if parameters['status']  is not '':
-				topic ='device/fan/status'
-				status = parameters['status']
-				ret.append(dict(topic=topic, payload=status))
+				fan['speed'] = int(parameters['number'])				
+			if parameters['status'] is not '':
+				fan['status'] = True if 'on' in parameters['status'] else False
+			ret['fan'] = fan
 		print('ret= {}'.format(ret))
 		return ret
 	parameters = cm.getNested(request, "queryResult", "parameters")
 	publish = getPublish(parameters)
-	for element in publish:
-		with open(element['topic'],'w') as file:
-			file.write(element['payload'])
+	header = {'Content-Type':'application/json'}
+	response=requests.put(url="http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/change/device",
+			data=json.dumps(publish),
+			headers=header)
 	return "OK"
 		
 if __name__ == '__main__':
