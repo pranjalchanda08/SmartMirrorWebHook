@@ -95,16 +95,15 @@ def DeviceStatus(request):
 			if parameters['number'] is not '':
 				light['dim'] = int(parameters['number'])
 			if parameters['status'] is not '':
-				light['status'] = True if 'on' in parameters['status'] else False
+				light['status'] = 1 if 'on' in parameters['status'] else 0
 			ret ['light'] = light
 		if 'fan' in parameters['device']:
 			fan={}
 			if parameters['number'] is not '':
 				fan['speed'] = int(parameters['number'])				
 			if parameters['status'] is not '':
-				fan['status'] = True if 'on' in parameters['status'] else False
+				fan['status'] = 1 if 'on' in parameters['status'] else 0
 			ret['fan'] = fan
-		print('ret= {}'.format(ret))
 		return ret
 	parameters = cm.getNested(request, "queryResult", "parameters")
 	publish = getPublish(parameters)
