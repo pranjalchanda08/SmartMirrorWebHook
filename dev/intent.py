@@ -88,29 +88,25 @@ def Weather(request,unit='C'):
 
 def DeviceStatus(request):
 	def getPublish(parameters):
-		print(parameters)
-		ret = {}
+		ret = requests.get(url= "http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/home/device").json()
 		if 'light' in parameters['device']:
-			light={}
 			if parameters['number'] is not '':
-				light['dim'] = int(parameters['number'])
+				ret["light"]['dim'] = int(parameters['number'])
 			if parameters['status'] is not '':
-				light['status'] = 1 if 'on' in parameters['status'] else 0
-			ret ['light'] = light
+				ret["light"]['status'] = 1 if 'on' in parameters['status'] else 0
+			
 		if 'fan' in parameters['device']:
-			fan={}
 			if parameters['number'] is not '':
-				fan['speed'] = int(parameters['number'])				
+				ret["fan"]['speed'] = int(parameters['number'])				
 			if parameters['status'] is not '':
-				fan['status'] = 1 if 'on' in parameters['status'] else 0
-			ret['fan'] = fan
+				ret["fan"]['status'] = 1 if 'on' in parameters['status'] else 0
+			
 		return ret
 	parameters = cm.getNested(request, "queryResult", "parameters")
 	publish = getPublish(parameters)
 	header = {'Content-Type':'application/json'}
 	response=requests.put(url="http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/change/device",
-			data=json.dumps(publish),
-			headers=header)
+			data=json.dumps(publish),headers=header)
 	return "OK"
 		
 if __name__ == '__main__':
