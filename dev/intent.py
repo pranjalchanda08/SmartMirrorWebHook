@@ -88,26 +88,28 @@ def Weather(request,unit='C'):
 
 def DeviceStatus(request):
 	def getPublish(parameters):
+		success = False
 		ret = requests.get(url= "http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/home/device").json()
-		if 'light' in parameters['device']:
+		if 'light' == parameters['device']:
 			if parameters['number'] is not '':
 				ret["light"]['dim'] = int(parameters['number'])
 			if parameters['status'] is not '':
 				ret["light"]['status'] = 1 if 'on' in parameters['status'] else 0
-			
-		if 'fan' in parameters['device']:
+			success =  True
+		if 'fan' == parameters['device']:
 			if parameters['number'] is not '':
 				ret["fan"]['speed'] = int(parameters['number'])				
 			if parameters['status'] is not '':
 				ret["fan"]['status'] = 1 if 'on' in parameters['status'] else 0
-			
-		return ret
+			success =  True
+		return ret,success
 	parameters = cm.getNested(request, "queryResult", "parameters")
-	publish = getPublish(parameters)
+	publish,success = getPublish(parameters)
+	print(success)
 	header = {'Content-Type':'application/json'}
 	response=requests.put(url="http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/change/device",
 			data=json.dumps(publish),headers=header)
-	return "OK"
+	return "OK" if success is True else "Unknown Device"
 		
 if __name__ == '__main__':
 	cm.exportJson(modules)
