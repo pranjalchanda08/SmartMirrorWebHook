@@ -5,7 +5,7 @@ Steps to add dev codes to add more intents:
 	a. "import common" to your file.
 	b. Create a global dictionary as below:
 		{
-			"<$key>":{											//$key can be any given name to your keys
+			"$key":{											//$key can be any given name to your keys
 				"import"  : "dev.$fileName"
 				"intents" : {
 					"$intentName":{								//Same as registered on dialogflow

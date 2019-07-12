@@ -37,8 +37,6 @@ def RegisterJson(jsonFile = 'json/fnReg.json'):
 					globals()[intentVal['alias']]=common.getObject(intentVal['module'],intentVal['func'])
 			print(intent_string)
 
-RegisterJson()
-
 @app.route('/request/dailogueflow/' , methods=['POST'])
 def handle_POST():
 	global intent_reg, intent_string
@@ -60,4 +58,5 @@ def handle_GET():
 	return "Methode not supported", 405
 
 if __name__ == '__main__':
+	RegisterJson()
 	app.run(debug=True,port=5000)
