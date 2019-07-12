@@ -29,6 +29,6 @@ Steps to add dev codes to add more intents:
 			}
 		}
 	c. Add an entry point in the file "if __name__ == '__main__':" With a definite call of "common.exportJson(dictionary)" dictionary refers to the above created dictionary as argument and nothing else. 
-	When the code is executed it shall update the file json/fnReg.json with the above format of dictionary.
+	d. When the code is executed it shall update the file json/fnReg.json with the above format of dictionary.
 3. Now add your definations to the file and enjoy the execution. 
-4. Deployment is automated and as soon as you push your commit a build process will work on bitbucket as specified in bitbucket-pipelines.yml file.
+4. Deployment is automated and as soon as you push your commit a build process will work on heroku as required.

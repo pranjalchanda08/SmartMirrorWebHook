@@ -1,3 +1,6 @@
+'''**********************************************************************************************
+  * Imports
+  **********************************************************************************************'''
 import common as cm
 import requests
 from datetime import datetime
@@ -5,6 +8,9 @@ import os
 import json
 import time
 
+'''**********************************************************************************************
+  * Global Declarations
+  **********************************************************************************************'''
 pdi = "dev.intent"
 modules = {
 	"pdi":{
@@ -25,13 +31,13 @@ modules = {
 		}
 	}
 }
-def onConnect(client,userdata,flags,rc):
-	global MQTTConnectFlag
-	if rc==0:
-		MQTTConnectFlag=True			
-	else:
-		MQTTConnectFlag=False
-	
+
+'''**********************************************************************************************
+  * @brief	This function is responsible for handling Weather intent
+  *
+  * @param		 request 			request dictionary from request server
+  * @param		 unit				Temperature unit, default ^C
+  **********************************************************************************************'''
 def Weather(request,unit='C'):
 	Apixu_KEY = "69d1cf64bfe445a7831103122190404"
 	Apixu_Request = "http://api.apixu.com/v1/forecast.json"
@@ -73,7 +79,7 @@ def Weather(request,unit='C'):
 	if not forecast:
 		speech = "{} is {}, with a feel of {}°{}".format(cm.getNested(data,"location","name"),
 			cm.getNested(data,"current","condition","text"),
-			cm.getNested(data,"current",("feelslike_c" if unit=='C' else "feelslike_f")), unit)
+			cm.getNested(data,"current",("maxtemp_c" if unit=='C' else "maxtemp_f")), unit)
 	else:
 		forecast_data = data["forecast"]["forecastday"]
 		speech = 'For {}, '.format(cm.getNested(data,"location","name"))
@@ -86,6 +92,11 @@ def Weather(request,unit='C'):
 					temp_max,unit,temp_min,unit)
 	return speech
 
+'''**********************************************************************************************
+  * @brief	This function is responsible for handling device_status intent
+  *
+  * @param		 request 			request dictionary from request server
+  **********************************************************************************************'''
 def DeviceStatus(request):
 	def getPublish(parameters):
 		success = False
@@ -110,6 +121,9 @@ def DeviceStatus(request):
 	response=requests.put(url="http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/change/device",
 			data=json.dumps(publish),headers=header)
 	return "OK" if success is True else "Unknown Device"
-		
+
+'''**********************************************************************************************
+  * Main Block
+  **********************************************************************************************'''
 if __name__ == '__main__':
 	cm.exportJson(modules)
