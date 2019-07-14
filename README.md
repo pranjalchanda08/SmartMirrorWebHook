@@ -12,7 +12,7 @@ Steps to add dev codes to add more intents:
 2. The file must follow the following structure of coding.
 	* "import common" to your file.
 	* Create a global dictionary as in __dev/example.json__.
-	* Add an entry point in the file "if \__name__ == '\__main__':" With a definite call of "common.exportJson(dictionary)" dictionary refers to the above created dictionary as argument and nothing else. 
+	* Add an entry point in the file "if \_\_name\_\_ == '\_\_main\_\_':" With a definite call of "common.exportJson(dictionary)" dictionary refers to the above created dictionary as argument and nothing else. 
 	* When the code is executed it shall update the file json/fnReg.json with the above format of dictionary.
 3. Now add your definations to the file and enjoy the execution. 
 4. Deployment is automated and as soon as you push your commit and is merged to master branch a build process will work on heroku as required.
