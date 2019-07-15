@@ -1,6 +1,12 @@
+'''**********************************************************************************************
+  * Imports
+ **********************************************************************************************'''
 import common as cm
 import requests
 
+'''**********************************************************************************************
+  * Global Declarations
+ **********************************************************************************************'''
 pde = "dev.intent2"
 modules = {
 	"pde":{
@@ -24,7 +30,11 @@ modules = {
 
 def news(request):
 	pass
-
+'''**********************************************************************************************
+  * @brief	This function is responsible for handling Time intent
+  *
+  * @param		 request 			request dictionary from request server
+ **********************************************************************************************'''
 def Time(request):
 	location = request['queryResult']['parameters']['geo-country']
 	URL = "http://api.apixu.com/v1/current.json"
@@ -47,6 +57,8 @@ def Time(request):
 	minute = local_time.split(":")[1]
 	response = "The time is {} {} {} right now".format(hour,minute,ampm)
 	return response
-
+'''**********************************************************************************************
+  * Main Block
+ **********************************************************************************************'''
 if __name__ == '__main__':
 	cm.exportJson(modules)
