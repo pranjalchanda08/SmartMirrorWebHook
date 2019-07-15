@@ -15,5 +15,22 @@
         "alias": "getDeviceStatus"
       }
     }
+  },
+  "pde": {
+    "import": "dev.intent2",
+    "intents": {
+      "news": {
+        "func": "news",
+        "module": "dev.intent2",
+        "include": false,
+        "alias": "getNews"
+      },
+      "time": {
+        "func": "Time",
+        "module": "dev.intent2",
+        "include": true,
+        "alias": "getTime"
+      }
+    }
   }
 }
