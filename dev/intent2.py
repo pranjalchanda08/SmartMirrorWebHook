@@ -3,6 +3,7 @@
  **********************************************************************************************'''
 import common as cm
 import requests
+from newsapi import NewsApiClient
 
 '''**********************************************************************************************
   * Global Declarations
@@ -29,7 +30,25 @@ modules = {
 }
 
 def news(request):
-	pass
+	URL = "https://newsapi.org/v1/articles"
+	parameters = {
+	"apiKey":"4674be24a28241968c5077dc28ab1727",
+	"source":"bbc-news",
+	"sortBy":"top"
+	}
+	data = requests.get(url= URL, params= parameters).json()
+	my_article = data["articles"]
+	my_results = []
+	speech = "The top news is as follows: \n"
+	disp = ""
+	for ar in my_article:
+		my_results.append(ar["title"])
+		for i in range(len(my_results)):
+			# print(i + 1, my_results[i])
+			speech += "{}. \n".format(my_results[i])
+			disp += "{}. {}.\n".format(i + 1, my_results[i])
+	return disp,speech
+
 '''**********************************************************************************************
   * @brief	This function is responsible for handling Time intent
   *
@@ -55,8 +74,10 @@ def Time(request):
 	if hour==0:
 		hour = 12
 	minute = local_time.split(":")[1]
-	response = "The time is {} {} {} right now".format(hour,minute,ampm)
-	return response
+	speech = "The time is {} {} {} right now".format(hour,minute,ampm)
+	dispresp = "{}:{} {}".format(hour,minute,ampm)
+	return dispresp,speech
+
 '''**********************************************************************************************
   * Main Block
  **********************************************************************************************'''
