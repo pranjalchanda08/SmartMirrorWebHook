@@ -16,7 +16,7 @@ modules = {
   			"news":{
   				"func" : "news",
   				"module" : pde,
-  				"include": False,
+  				"include": True,
   				"alias"  : "getNews"
   			},  			
   			"time":{

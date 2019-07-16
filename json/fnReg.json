@@ -22,7 +22,7 @@
       "news": {
         "func": "news",
         "module": "dev.intent2",
-        "include": false,
+        "include": true,
         "alias": "getNews"
       },
       "time": {
