@@ -51,7 +51,7 @@ def handle_POST():
 	else:
 		response = 'Error:101'
 		print("Intent not registered! Please make include to true to add this intent to intent list.")
-	fulfillment ["fulfillmentText"] = response
+	fulfillment ["fulfillmentText"] = response + " Disp Text"
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
 	return jsonify(fulfillment),200
 
