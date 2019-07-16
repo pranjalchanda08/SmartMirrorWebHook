@@ -53,7 +53,7 @@ def handle_POST():
 		disp = 'Error:101'
 		print("Intent not registered! Please make include to true to add this intent to intent list.")
 	fulfillment ["fulfillmentText"] = disp
-	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
+	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [speech]
 	return jsonify(fulfillment),200
 
 @app.route('/',methods=['GET'])
