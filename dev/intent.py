@@ -80,6 +80,7 @@ def Weather(request,unit='C'):
 		speech = "{} is {}, with a feel of {}°{}".format(cm.getNested(data,"location","name"),
 			cm.getNested(data,"current","condition","text"),
 			cm.getNested(data,"current",("maxtemp_c" if unit=='C' else "maxtemp_f")), unit)
+		disp = "{}°{}".format(cm.getNested(data,"current",("maxtemp_c" if unit=='C' else "maxtemp_f")), unit)
 	else:
 		forecast_data = data["forecast"]["forecastday"]
 		speech = 'For {}, '.format(cm.getNested(data,"location","name"))
@@ -90,7 +91,8 @@ def Weather(request,unit='C'):
 			condition= forecast_data[x]['day']['condition']['text']
 			speech+='{} will be {}, with a maximum of {}°{} and a min of {}°{}.\n'.format(date,condition,
 					temp_max,unit,temp_min,unit)
-	return speech
+			disp+= '{} -> {}°{}, {}°{} {}\n'.format(date,temp_max,temp_min,condition)
+	return disp,speech
 
 '''**********************************************************************************************
   * @brief	This function is responsible for handling device_status intent
@@ -120,7 +122,9 @@ def DeviceStatus(request):
 	header = {'Content-Type':'application/json'}
 	response=requests.put(url="http://ec2-18-218-53-189.us-east-2.compute.amazonaws.com:1234/change/device",
 			data=json.dumps(publish),headers=header)
-	return "OK" if success is True else "Unknown Device"
+	disp = "OK" if success is True else "Unknown Device"
+	speech = "Request complete" 
+	return disp, speech
 
 '''**********************************************************************************************
   * Main Block
