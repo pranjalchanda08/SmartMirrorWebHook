@@ -47,11 +47,12 @@ def handle_POST():
 	Intent = common.getNested(request.json, "queryResult", "intent", "displayName")
 	Intent = Intent.lower()
 	if Intent in intent_string:
-		response = globals()[intent_reg[Intent]["alias"]](request=request.json)
+		disp, speech = globals()[intent_reg[Intent]["alias"]](request=request.json)
 	else:
-		response = 'Error:101'
+		speech = 'Error:101'
+		disp = 'Error:101'
 		print("Intent not registered! Please make include to true to add this intent to intent list.")
-	fulfillment ["fulfillmentText"] = response + " Disp Text"
+	fulfillment ["fulfillmentText"] = disp
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
 	return jsonify(fulfillment),200
 
