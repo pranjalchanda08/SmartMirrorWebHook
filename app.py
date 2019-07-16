@@ -15,7 +15,8 @@ fulfillment = {
 	"fulfillmentMessages": [
 		{
 			"text" : {
-				"text" : ['abcd']
+				"text" : ['abcd'],
+				"dispText" : ['abcd']
 			}
 		}
 	],
@@ -53,6 +54,7 @@ def handle_POST():
 		print("Intent not registered! Please make include to true to add this intent to intent list.")
 	fulfillment ["fulfillmentText"] = response
 	fulfillment ["fulfillmentMessages"][0]["text"]["text"] = [response]
+	fulfillment ["fulfillmentMessages"][0]["text"]["dispText"] = [response + "Disp text"]
 	return jsonify(fulfillment),200
 
 @app.route('/',methods=['GET'])
